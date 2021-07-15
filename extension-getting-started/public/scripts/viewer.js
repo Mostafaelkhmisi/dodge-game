@@ -2,7 +2,7 @@ let token = '';
 let tuid = '';
 const twitch = window.Twitch.ext;
 
-//   GAME  START HERERE EEEEEEEEEEEEEEEE
+//   GAME  VARIABLES 
 let player;
 let gameLife;
 let running = false;
@@ -14,24 +14,27 @@ let diff;
 let score;
 let num;
 let progress;
-
+ 
 let overlay = document.getElementById("overlay")
 let canvasText = document.getElementById("canvasText")
 
+//   GAME  REQUESTS 
 let requestsForGame = {
+  get: createRequestForGame('GET', 'query'),
   set: createRequestForGame('POST', 'score', score),
-  get: createRequestForGame('GET', 'query')
 };
 
+//   GAME  SCORE AND LEVEL DIVS 
 let scoreboard = {
 	score : document.getElementById("score"),
 	level : document.getElementById("level"),
 }
+//   GAME STARTS HERE / STARTS WHEN THE PAGE LOADS
 function startGame(){
 	gameArea.start();
 	init();
 }
-
+//   INITIALIZING GAME
 function init(){
 	gameLife = 0;
 	score = 0;
@@ -42,12 +45,11 @@ function init(){
 	scoreboard.level.innerText = num;
 	player = new component(30,30,"red",gameArea.canvas.width/2-5,gameArea.canvas.height/2-5,function(c){
 		if(isKeyDown("shift")){
-			speed = 2;
+			speed = 2;  //   SETTING SPEED TO 2 WHEN HOLDING SHIFT
 		}
 		else{
-			speed = 5;
+			speed = 5;//   SETTING SPEED TO 5 WHEN NOT! HOLDING SHIFT
 		}
-		
 		if(isKeyDown("w")){
 			c.y -= speed;
 			c.y = clamp(0,gameArea.canvas.height-c.height,c.y);
@@ -105,32 +107,37 @@ function spawnObject(){
 			x = -20;
 			y = Math.trunc(Math.random() * gameArea.canvas.height-20);
 			speedX = blockSpeed;
+			// ctx.fillStyle = "green";
 			break;  // Left Side Blocks 
 		case 2:
 			x = gameArea.canvas.width;
 			y = Math.trunc(Math.random() * gameArea.canvas.height-20);
 			speedX = -1 * blockSpeed;
+			// ctx.fillStyle = "yellow";
 			break; // right Side Blocks 
 		case 1:
 			x = Math.trunc(Math.random() * gameArea.canvas.width-20);
 			y = -20;
 			speedY = blockSpeed;
+			// ctx.fillStyle = "red";
 			break;  // top Side Blocks 
 		case 3:
 			x = Math.trunc(Math.random() * gameArea.canvas.width-20);
 			y = gameArea.canvas.height;
 			speedY = -1 * blockSpeed;
+			// ctx.fillStyle = "blue";
 			break; // bottom Side Blocks 
 	}
-	obj = new component(20,20,"green",x,y,function(c){
-		if(c.isTouching(player)){
+	obj = new component(20,20,"red",x,y,function(c){
+		if(c.isTouching(player)){  //  if component (player) touch component (obj) set to game lost and stop game
 			alive = false;
 			running = false;
 			overlay.style.display = "flex";
 			canvasText.style.color = "#fff";
       		// SEND SCORE HERE
-      		// requestsForGame.set(score)
-			  GameLostSendData()
+
+			GameLostSendData() // when game is lost Send Data To Server
+
 			console.log("Game finished with a score of: "+score);
 		}
 		if(!c.isOnScreen()){
@@ -152,11 +159,10 @@ function component(width, height, color, x, y, action, type){
 	this.y = y;
 	this.action = action;
 	
-	if (type == "image") {
+	if (type == "image") { // if image variable sent set the image to this
 		this.img = new Image();
 		this.img.src = "./style/giphy.gif";
 		this.img.onload = () => {
-			// ctx.clearRect(0, 0, this.width, this.height);
 			ctx.drawImage(this.img, this.x, this.y, this.width, this.width);
 		};
 	}
@@ -166,8 +172,9 @@ function component(width, height, color, x, y, action, type){
 		this.x += this.speedX;
 		this.y += this.speedY;
 		ctx = gameArea.context;
-		ctx.fillStyle = color;
-		if (type == "image") {
+
+		// ctx.fillStyle = color; // set the blocks colors  
+		if (type == "image") { // if image variable sent set the image 
 			ctx.drawImage(this.img, this.x, this.y, this.width, this.width);
 		}else{
 			ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -176,7 +183,7 @@ function component(width, height, color, x, y, action, type){
 
 	}
 
-	this.isTouching = function(other){
+	this.isTouching = function(other){   
 		let yes = true;
 		if(other.x + other.width < this.x || this.x + this.width < other.x){
 			yes = false;
@@ -200,7 +207,7 @@ function component(width, height, color, x, y, action, type){
 
 let gameObjects = {
 	objects : {},
-	add : function(obj, layer){
+	add : function(obj, layer){  //  ADDING BLOCKS 
 		if(layer in gameObjects.objects){
 			gameObjects.objects[layer].push(obj);
 		}
@@ -209,7 +216,7 @@ let gameObjects = {
 			gameObjects.objects[layer].push(obj);
 		}
 	},
-	remove : function(obj){
+	remove : function(obj){ //  REMOVING BLOCKS 
 		for(let layer in gameObjects.objects){
 			let i = gameObjects.objects[layer].indexOf(obj)
 			if(i != -1){
@@ -217,7 +224,7 @@ let gameObjects = {
 			}
 		}
 	},
-	clear : function(){
+	clear : function(){ //  CLEARS BLOCKS 
 		gameObjects.objects = {};
 	},
 	update : function(){
@@ -241,9 +248,9 @@ let gameArea = {
 	canvas : document.getElementById("canvas"),
 	start : function(){
 		this.context = this.canvas.getContext("2d");
-		this.interval = setInterval(updateGameArea, 20);
+		this.interval = setInterval(updateGameArea, 20); // UPDATE CANVAS EVERY 20 milisecond
 	},
-	clear : function(){
+	clear : function(){ //  CLEAR BLOCKS BEFORE GAME STARTSAND PUTTING THE PLAYER IN THE MIDDLE
 		this.context.clearRect(0,0,this.canvas.width,this.canvas.height);
 	}
 }
@@ -267,49 +274,27 @@ function clamp(low, high, test) {
 	return test;
 }
 
-//Button event handlers
-// function reset(){
-// 	gameObjects.clear();
-// 	gameArea.clear();
-// 	init();
-// 	alive = true;
-// }
-
 function start(){
-	if(alive){
-		running = true;
-		
-	}else{
-		gameObjects.clear();
-		gameArea.clear();
-		init();
-		alive = true;
-		running = true;
-	}
-	
+	gameObjects.clear(); //  RESET GAME AND START AGAIN
+	gameArea.clear();
+	init();
+	alive = true;
+	running = true;
+
 	overlay.style.display = "none";
 	canvasText.style.color = "black";
 
 }
 
-function stop(){
-	running = false;
-	overlay.style.display = "flex";
-	canvasText.style.color = "#fff";
-}
-
-
-
   // when game is lost Send Data
 function GameLostSendData () {
   if(!token) { return twitch.rig.log('Not authorized'); }
     twitch.rig.log('Sending Score');
-    $.ajax(requestsForGame.set);
+    $.ajax(requestsForGame.set); // IF THERE IS A TOKEN SEND GAME SCORE
 };
 
-
 function createRequestForGame (type, urlName, score) {
-  console.log(score, "Request")
+  twitch.rig.log( type," : Request", score);
   return {
     type: type,
     url: location.protocol + '//localhost:8081/game/' + urlName,
@@ -322,11 +307,9 @@ function createRequestForGame (type, urlName, score) {
 }
 
 function SendScore (score) {
-  $('#score').html(score);
-  twitch.rig.log('Score Updated');
-
+  $('#score').html(score);  // Got Score From BackEnd Settings It In Game
+  twitch.rig.log('Score Updated', score);
 }
-//  GAME END HEREEEEEEEEEEEEEEE
 
 
 function setAuth (token) {
@@ -345,13 +328,12 @@ twitch.onAuthorized(function (auth) {
   token = auth.token;
   tuid = auth.userId;
 
-  // enable the button
-  // $('#cycle').removeAttr('disabled');
+  // enable the buttons  IF Authorized
   $('#disabledInputs1').removeAttr('disabled');
   $('#disabledInputs2').removeAttr('disabled');
   $('#disabledInputs3').removeAttr('disabled');
-  setAuth(token);
-  $.ajax(requestsForGame.get);
+  setAuth(token); // Set Token In Authrization Bearer
+  $.ajax(requestsForGame.get); // Get Score From BackEnd
 });
 function logError(_, error, status) {
   twitch.rig.log('EBS request returned '+status+' ('+error+')');
@@ -360,37 +342,3 @@ function logError(_, error, status) {
 function logSuccess(hex, status) {
   twitch.rig.log('EBS request returned '+hex+' ('+status+')');
 }
-
-
-
-// create the request options for our Twitch API calls
-// const requests = {
-//   set: createRequest('POST', 'cycle'),
-//   get: createRequest('GET', 'query')
-// };
-
-// function createRequest (type, method) {
-//   return {
-//     type: type,
-//     url: location.protocol + '//localhost:8081/color/' + method,
-//     success: updateBlock,
-//     error: logError
-//   };
-// }
-
-
-// function updateBlock (hex) {
-//   twitch.rig.log('Updating block color');
-//   $('#color').css('background-color', hex);
-// }
-
-
-
-// $(function () {
-//   // when we click the cycle button
-//   $('#cycle').click(function () {
-//   if(!token) { return twitch.rig.log('Not authorized'); }
-//     twitch.rig.log('Requesting a color cycle');
-//     $.ajax(requests.set);
-//   });
-// });

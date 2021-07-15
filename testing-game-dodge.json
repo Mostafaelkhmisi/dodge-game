@@ -1,7 +1,7 @@
 {
   "allowHttpBackend": false,
-  "backendCommand": "node backend -c \"xoj9qjwk7q9sfon1hv2mprhy9atsf0\" -s \"KISlI3iUp7ocjw/1FHuWtyZ0B2gaEQdwIAKpw6Z45G0=\"",
-  "backendFolderName": "C:\\Users\\User1\\Desktop\\twitch\\twitch-dodge-game\\game\\services",
+  "backendCommand": "node backend -c \"xoj9qjwk7q9sfon1hv2mprhy9atsf0\" -s \"KISlI3iUp7ocjw/1FHuWtyZ0B2gaEQdwIAKpw6Z45G0=\" ",
+  "backendFolderName": "extension-getting-started\\services",
   "certificateExceptions": [
     {
       "isAllowed": true,
@@ -92,7 +92,7 @@
     "whitelistedPanelUrls": []
   },
   "frontendCommand": "",
-  "frontendFolderName": "C:\\Users\\User1\\Desktop\\twitch\\twitch-dodge-game\\game\\public",
+  "frontendFolderName": "extension-getting-started\\public",
   "name": "testing-game-dodge",
   "usingRandomFrontendHostingPort": false,
   "version": 3
