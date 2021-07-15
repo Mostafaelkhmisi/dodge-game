@@ -6,7 +6,7 @@ body{
 }
 
 canvas{
-	background-color:#FFFFFF;
+	background-image: url("../images/space.jpg");
 }
 
 .instructions{
@@ -40,6 +40,7 @@ canvas{
 
 .canvasText{
 	position: absolute;
+	color: #fff;
 	top: 0;
 	right: 0;
 	z-index: 2;

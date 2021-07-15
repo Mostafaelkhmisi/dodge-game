@@ -16,7 +16,6 @@ let num;
 let progress;
  
 let overlay = document.getElementById("overlay")
-let canvasText = document.getElementById("canvasText")
 
 //   GAME  REQUESTS 
 let requestsForGame = {
@@ -128,12 +127,11 @@ function spawnObject(){
 			// ctx.fillStyle = "blue";
 			break; // bottom Side Blocks 
 	}
-	obj = new component(20,20,"red",x,y,function(c){
+	obj = new component(60,60,"blue",x,y,function(c){
 		if(c.isTouching(player)){  //  if component (player) touch component (obj) set to game lost and stop game
 			alive = false;
 			running = false;
 			overlay.style.display = "flex";
-			canvasText.style.color = "#fff";
       		// SEND SCORE HERE
 
 			GameLostSendData() // when game is lost Send Data To Server
@@ -159,9 +157,16 @@ function component(width, height, color, x, y, action, type){
 	this.y = y;
 	this.action = action;
 	
+	
 	if (type == "image") { // if image variable sent set the image to this
 		this.img = new Image();
-		this.img.src = "./style/giphy.gif";
+		this.img.src = "./images/giphy.png";
+		this.img.onload = () => {
+			ctx.drawImage(this.img, this.x, this.y, this.width, this.width);
+		};
+	}else {
+		this.img = new Image();
+		this.img.src = "./images/bomb.png";
 		this.img.onload = () => {
 			ctx.drawImage(this.img, this.x, this.y, this.width, this.width);
 		};
@@ -172,15 +177,15 @@ function component(width, height, color, x, y, action, type){
 		this.x += this.speedX;
 		this.y += this.speedY;
 		ctx = gameArea.context;
-
-		// ctx.fillStyle = color; // set the blocks colors  
+		
+		ctx.fillStyle = color; // set the blocks colors
 		if (type == "image") { // if image variable sent set the image 
 			ctx.drawImage(this.img, this.x, this.y, this.width, this.width);
 		}else{
-			ctx.fillRect(this.x, this.y, this.width, this.height);
+			// ctx.fillRect(this.x, this.y, this.width, this.height);
+			ctx.drawImage(this.img, this.x, this.y, this.width, this.width);
 		}
 		
-
 	}
 
 	this.isTouching = function(other){   
@@ -282,15 +287,12 @@ function start(){
 	running = true;
 
 	overlay.style.display = "none";
-	canvasText.style.color = "black";
-
 }
-
   // when game is lost Send Data
 function GameLostSendData () {
-  if(!token) { return twitch.rig.log('Not authorized'); }
-    twitch.rig.log('Sending Score');
-    $.ajax(requestsForGame.set); // IF THERE IS A TOKEN SEND GAME SCORE
+if(!token) { return twitch.rig.log('Not authorized'); }
+	twitch.rig.log('Sending Score');
+	$.ajax(requestsForGame.set); // IF THERE IS A TOKEN SEND GAME SCORE
 };
 
 function createRequestForGame (type, urlName, score) {
