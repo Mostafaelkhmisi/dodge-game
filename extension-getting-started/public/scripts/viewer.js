@@ -19,8 +19,8 @@ let overlay = document.getElementById("overlay")
 
 //   GAME  REQUESTS 
 let requestsForGame = {
-  get: createRequestForGame('GET', 'query'),
-  set: createRequestForGame('POST', 'score', score),
+  get: createRequestForGame('GET', 'getscore'),
+  set: createRequestForGame('POST', 'sendscore', score),
 };
 
 //   GAME  SCORE AND LEVEL DIVS 
@@ -134,7 +134,22 @@ function spawnObject(){
 			overlay.style.display = "flex";
       		// SEND SCORE HERE
 
-			GameLostSendData() // when game is lost Send Data To Server
+			// GameLostSendData() // first type to send data 
+
+			// when game is lost Send Data To Server
+			$(function() {
+				// when we lose the game
+				if(!token) { return twitch.rig.log('Not authorized'); }
+				twitch.rig.log('Sending Score To Backend');
+				$.ajax(requestsForGame.set);
+			
+				// listen for incoming broadcast message from our EBS
+				twitch.listen('broadcast', function (target, contentType, color) {
+					twitch.rig.log('Received Broadcast Score');
+					SendScore(color);
+				});
+			});
+
 
 			console.log("Game finished with a score of: "+score);
 		}
@@ -289,11 +304,11 @@ function start(){
 	overlay.style.display = "none";
 }
   // when game is lost Send Data
-function GameLostSendData () {
-if(!token) { return twitch.rig.log('Not authorized'); }
-	twitch.rig.log('Sending Score');
-	$.ajax(requestsForGame.set); // IF THERE IS A TOKEN SEND GAME SCORE
-};
+// function GameLostSendData () { // first type to send data 
+// if(!token) { return twitch.rig.log('Not authorized'); }
+// 	twitch.rig.log('Sending Score');
+// 	$.ajax(requestsForGame.set); // IF THERE IS A TOKEN SEND GAME SCORE
+// };
 
 function createRequestForGame (type, urlName, score) {
   twitch.rig.log( type," : Request", score);
@@ -344,3 +359,5 @@ function logError(_, error, status) {
 function logSuccess(hex, status) {
   twitch.rig.log('EBS request returned '+hex+' ('+status+')');
 }
+
+
