@@ -1,0 +1,99 @@
+{
+  "allowHttpBackend": false,
+  "backendCommand": "node backend -c \"xoj9qjwk7q9sfon1hv2mprhy9atsf0\" -s \"KISlI3iUp7ocjw/1FHuWtyZ0B2gaEQdwIAKpw6Z45G0=\"",
+  "backendFolderName": "C:\\Users\\User1\\Desktop\\twitch\\twitch-dodge-game\\game\\services",
+  "certificateExceptions": [
+    {
+      "isAllowed": true,
+      "isEphemeral": false,
+      "isOrigin": false,
+      "value": "wss://pubsub-edge.twitch.tv/v1"
+    }
+  ],
+  "extensionViews": [
+    {
+      "channelId": "121333573",
+      "configurationAnchor": "component",
+      "displayChannelName": "pizzzaguyy",
+      "features": {
+        "isBitsEnabled": false,
+        "isChatEnabled": false,
+        "isSubscriptionStatusAvailable": false
+      },
+      "frameSize": {
+        "width": 1280,
+        "height": 720
+      },
+      "id": "1",
+      "isPopout": false,
+      "label": "",
+      "linked": true,
+      "linkedUserId": "265737932",
+      "orientation": "Portrait",
+      "type": "component",
+      "viewerType": "Logged-In Viewer"
+    }
+  ],
+  "manifest": {
+    "anchor": "component",
+    "assetUrls": [],
+    "authorName": "pizzzaguyy",
+    "bitsEnabled": false,
+    "canInstall": true,
+    "configUrl": "https://localhost:8080/config.html",
+    "configurationLocation": "none",
+    "description": "",
+    "eulaTosUrl": "",
+    "hasChatSupport": false,
+    "iconUrl": "",
+    "iconUrls": {},
+    "id": "xoj9qjwk7q9sfon1hv2mprhy9atsf0",
+    "installationCount": -42,
+    "liveConfigUrl": "",
+    "name": "testing-game-dodge",
+    "panelHeight": 0,
+    "privacyPolicyUrl": "",
+    "requestIdentityLink": false,
+    "requiredBroadcasterAbilities": [],
+    "screenshotUrls": [],
+    "sku": "",
+    "state": "Testing",
+    "subscriptionsSupportLevel": "none",
+    "summary": "",
+    "supportEmail": "mostafaelkhmisi@hotmail.com",
+    "vendorCode": "",
+    "version": "0.0.1",
+    "viewerSummary": "",
+    "viewerUrl": "",
+    "viewerUrls": {
+      "component": "https://localhost:8080/video_component.html"
+    },
+    "views": {
+      "component": {
+        "viewerUrl": "https://localhost:8080/video_component.html",
+        "aspectWidth": 0,
+        "aspectHeight": 0,
+        "aspectRatioX": 300,
+        "aspectRatioY": 200,
+        "scalePixels": 1024,
+        "targetHeight": 4000,
+        "size": 0,
+        "zoom": false,
+        "zoomPixels": 0,
+        "canLinkExternalContent": false,
+        "autoScale": true
+      },
+      "config": {
+        "viewerUrl": "https://localhost:8080/config.html",
+        "canLinkExternalContent": false
+      }
+    },
+    "whitelistedConfigUrls": [],
+    "whitelistedPanelUrls": []
+  },
+  "frontendCommand": "",
+  "frontendFolderName": "C:\\Users\\User1\\Desktop\\twitch\\twitch-dodge-game\\game\\public",
+  "name": "testing-game-dodge",
+  "usingRandomFrontendHostingPort": false,
+  "version": 3
+}
