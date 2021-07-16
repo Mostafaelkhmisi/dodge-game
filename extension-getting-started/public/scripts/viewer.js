@@ -144,12 +144,12 @@ function spawnObject(){
 				$.ajax(requestsForGame.set);
 			
 				// listen for incoming broadcast message from our EBS
-				twitch.listen('broadcast', function (target, contentType, color) {
+				// this updates the score but sends it to all users
+				twitch.listen('broadcast', function (target, contentType, score) {
 					twitch.rig.log('Received Broadcast Score');
-					SendScore(color);
+					SendScore(score);
 				});
 			});
-
 
 			console.log("Game finished with a score of: "+score);
 		}

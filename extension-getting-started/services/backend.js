@@ -67,7 +67,7 @@
    option('-o, --owner-id <owner_id>', 'Extension owner ID').
    parse(process.argv);
  
- const ownerId = getOption('ownerId', 'EXT_OWNER_ID');
+//  const ownerId = getOption('ownerId', 'EXT_OWNER_ID'); // doesnt work when i remove the comment
  const secret = Buffer.from(getOption('secret', 'EXT_SECRET'), 'base64');
  const clientId = getOption('clientId', 'EXT_CLIENT_ID');
  
@@ -91,14 +91,14 @@
  const server = new Hapi.Server(serverOptions);
  
  (async () => {
-   // Handle a viewer request to cycle the color.
+   // Handle a viewer request to update score.
    server.route({
      method: 'POST',
      path: '/game/sendscore',
      handler: scoreSenderHandler,
    });
  
-   // Handle a new viewer requesting the color.
+   // Handle a new viewer requesting the score.
    server.route({
      method: 'GET',
      path: '/game/getscore',
@@ -154,11 +154,12 @@
  }
  
  function scoreSenderHandler(req) {
+   console.log(req.payload, "backend payload")
    // Verify all requests.
    const payload = verifyAndDecode(req.headers.authorization);
    const { channel_id: channelId, opaque_user_id: opaqueUserId } = payload;
  
-   // Store the color for the channel.
+   // Store the score for the channel.
    let currentScore = channelScores[channelId] || initialScore;
  
    // Bot abuse prevention:  don't allow a user to spam the button.
@@ -169,11 +170,11 @@
    // Rotate the color as if on a color wheel.
    verboseLog(STRINGS.updatingScore, channelId, opaqueUserId);
  
-   // Save the new color for the channel.
+   // Save the new score for the channel.
    channelScores[channelId] = currentScore;
  
-   // Broadcast the color change to all other extension instances on this channel.
-   attemptScoreBroadcast(channelId);
+   // Broadcast the score change to all other extension instances on this channel.
+  //  attemptScoreBroadcast(channelId); // this if u want to change the score for all users
  
    return currentScore;
  }
@@ -182,9 +183,9 @@
    // Verify all requests.
    const payload = verifyAndDecode(req.headers.authorization);
  
-   // Get the color for the channel from the payload and return it.
+   // Get the score for the channel from the payload and return it.
    const { channel_id: channelId, opaque_user_id: opaqueUserId } = payload;
-   const currentScore = color(channelScores[channelId] || initialScore).hex();
+   const currentScore = channelScores[channelId] || initialScore;
    verboseLog(STRINGS.sendScore, currentScore, opaqueUserId);
    return currentScore;
  }

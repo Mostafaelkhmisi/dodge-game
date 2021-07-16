@@ -1,7 +1,7 @@
 {
-  "name": "extension-hello-world",
+  "name": "testing-game-dodge",
   "version": "1.0.0",
-  "description": "Simple Hello World Twitch Extension",
+  "description": "Dodging game",
   "main": "index.js",
   "scripts": {
     "cert": "node bin/generate_cert.js server",
@@ -17,7 +17,7 @@
     "boom": "^7.2.0",
     "color": "^3.0.0",
     "commander": "^2.15.0",
-    "hapi": "^17.2.2",
+    "hapi": "^17.8.4",
     "inert": "^5.1.0",
     "jsonwebtoken": "^8.2.0",
     "request": "^2.85.0",
